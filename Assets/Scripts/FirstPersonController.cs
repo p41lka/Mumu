@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
+using System.Collections;
 #endif
 
 namespace StarterAssets
@@ -11,6 +12,11 @@ namespace StarterAssets
 #endif
 	public class FirstPersonController : MonoBehaviour
 	{
+		[SerializeField] private Texture2D Air;
+		[SerializeField] private int AirSize = 10;
+		[SerializeField] private Camera playerCamera;
+		[SerializeField] private AudioClip shootSound;
+
 		[Header("Player")]
 		[Tooltip("Move speed of the character in m/s")]
 		public float MoveSpeed = 4.0f;
@@ -74,7 +80,34 @@ namespace StarterAssets
 
 		private const float _threshold = 0.01f;
 
-		private bool IsCurrentDeviceMouse
+
+		private void Shoot()
+        {
+            if (_input.fire)
+            {
+				GetComponent<AudioSource>().Play();
+				RaycastHit hit;
+				if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit))
+				{
+					if (hit.transform.gameObject.TryGetComponent<Puppy>(out Puppy puppy))
+                    {
+						puppy.Kill();
+						GameObject.FindObjectOfType<Bell>().Ringing();
+                    }
+				}
+				_input.fire = false;
+				
+            }
+        }
+
+
+
+        private void OnGUI()
+        {
+			GUI.DrawTexture(new Rect(Screen.width / 2, Screen.height / 2, AirSize, AirSize), Air);
+        }
+
+        private bool IsCurrentDeviceMouse
 		{
 			get
 			{
@@ -97,6 +130,8 @@ namespace StarterAssets
 
 		private void Start()
 		{
+			GetComponent<AudioSource>().clip = shootSound;
+
 			_controller = GetComponent<CharacterController>();
 			_input = GetComponent<StarterAssetsInputs>();
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
@@ -115,6 +150,7 @@ namespace StarterAssets
 			JumpAndGravity();
 			GroundedCheck();
 			Move();
+			Shoot();
 		}
 
 		private void LateUpdate()
