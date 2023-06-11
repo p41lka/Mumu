@@ -6,6 +6,7 @@ using UnityEngine.AI;
 public class Puppy : MonoBehaviour
 {
     [SerializeField] private Transform player;
+    [SerializeField] private AudioClip[] WoofSounds;
     [Range(0f, 1f)] [SerializeField] private float woofChance = 0.1f;
     [SerializeField] private float woofPeriodInSec = 1.5f;
     private NavMeshAgent nav;
@@ -37,6 +38,7 @@ public class Puppy : MonoBehaviour
         {
             if (Random.Range(0f, 1f) <= woofChance)
             {
+                GetComponent<AudioSource>().clip = WoofSounds[Random.Range(0, WoofSounds.Length)];
                 GetComponent<AudioSource>().Play();
             }
             yield return new WaitForSeconds(woofPeriodInSec);
@@ -49,6 +51,7 @@ public class Puppy : MonoBehaviour
     {
         alive = false;
         Destroy(GetComponent<NavMeshAgent>());
+        GetComponent<AudioSource>().volume = 0f;
         
         transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, -90f);
     }

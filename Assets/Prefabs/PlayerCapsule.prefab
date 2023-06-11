@@ -260,7 +260,9 @@ MonoBehaviour:
   Air: {fileID: 10912, guid: 0000000000000000f000000000000000, type: 0}
   AirSize: 10
   playerCamera: {fileID: 0}
-  shootSound: {fileID: 8300000, guid: 472bb54620aa1044ebc8054b724bf6ba, type: 3}
+  shootSound: {fileID: 8300000, guid: ffff5f64575394f44af5bfb6d08777fd, type: 3}
+  endScreen: {fileID: 0}
+  endScreenDelay: 4
   MoveSpeed: 4
   SprintSpeed: 6
   RotationSpeed: 1
@@ -426,7 +428,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.705
   m_Pitch: 1
   Loop: 0
   Mute: 0

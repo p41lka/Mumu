@@ -2,6 +2,8 @@
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
 using System.Collections;
+using UnityEngine.Video;
+using UnityEngine.UI;
 #endif
 
 namespace StarterAssets
@@ -16,6 +18,8 @@ namespace StarterAssets
 		[SerializeField] private int AirSize = 10;
 		[SerializeField] private Camera playerCamera;
 		[SerializeField] private AudioClip shootSound;
+		[SerializeField] private GameObject endScreen;
+		[SerializeField] private float endScreenDelay = 2f;
 
 		[Header("Player")]
 		[Tooltip("Move speed of the character in m/s")]
@@ -80,6 +84,8 @@ namespace StarterAssets
 
 		private const float _threshold = 0.01f;
 
+		private bool showGUI = true;
+
 
 		private void Shoot()
         {
@@ -93,6 +99,7 @@ namespace StarterAssets
                     {
 						puppy.Kill();
 						GameObject.FindObjectOfType<Bell>().Ringing();
+						Invoke("EnableEndScreen", endScreenDelay);
                     }
 				}
 				_input.fire = false;
@@ -100,11 +107,49 @@ namespace StarterAssets
             }
         }
 
+		IEnumerator VideoAppear(float speed)
+        {
+			endScreen.GetComponentInChildren<VideoPlayer>().targetCameraAlpha = 0f;
+			while (1f - endScreen.GetComponentInChildren<VideoPlayer>().targetCameraAlpha > 0.01)
+            {
+				endScreen.GetComponentInChildren<VideoPlayer>().targetCameraAlpha += Time.deltaTime * speed;
+				yield return null;
+            }
+			endScreen.GetComponentInChildren<VideoPlayer>().targetCameraAlpha = 1f;
+        }
+
+		IEnumerator VideoFade(float delay, float speed)
+		{
+			float alpha = 0;
+			yield return new WaitForSeconds(delay);
+			while (1f - alpha > 0.01f)
+			{
+				alpha += Time.deltaTime * speed;
+				endScreen.GetComponent<Image>().color = new Color(0f, 0f, 0f, alpha);
+				yield return null;
+			}
+			endScreen.GetComponent<Image>().color = new Color(0f, 0f, 0f, 1f);
+		}
+
+
+
+		private void EnableEndScreen()
+        {
+			_playerInput.DeactivateInput();
+			showGUI = false;
+			endScreen.SetActive(true);
+			StartCoroutine(VideoAppear(2f));
+			FindObjectOfType<Bell>().StopRinging(0.5f);
+			StartCoroutine(VideoFade(76f, 2f));
+		}
+
 
 
         private void OnGUI()
         {
-			GUI.DrawTexture(new Rect(Screen.width / 2, Screen.height / 2, AirSize, AirSize), Air);
+			if (showGUI)
+				GUI.DrawTexture(new Rect(Screen.width / 2, Screen.height / 2, AirSize, AirSize), Air);
+			
         }
 
         private bool IsCurrentDeviceMouse

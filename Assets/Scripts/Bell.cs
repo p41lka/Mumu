@@ -24,6 +24,11 @@ public class Bell : MonoBehaviour
         StartCoroutine(Swinging());
     }
 
+    public void StopRinging(float speed)
+    {
+        StartCoroutine(RingFade(speed));
+    }
+
     IEnumerator Swinging()
     {
         float startTime = Time.time;
@@ -33,5 +38,17 @@ public class Bell : MonoBehaviour
             transform.rotation = Quaternion.Euler(xAngle, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
             yield return null;
         }
+    }
+
+    IEnumerator RingFade(float speed)
+    {
+        GetComponent<AudioSource>().volume = 1f;
+        while (GetComponent<AudioSource>().volume > 0.01)
+        {
+           GetComponent<AudioSource>().volume -= Time.deltaTime * speed;
+            yield return null;
+        }
+        GetComponent<AudioSource>().volume = 0f;
+
     }
 }
