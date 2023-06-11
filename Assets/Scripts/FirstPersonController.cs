@@ -20,6 +20,7 @@ namespace StarterAssets
 		[SerializeField] private AudioClip shootSound;
 		[SerializeField] private GameObject endScreen;
 		[SerializeField] private float endScreenDelay = 2f;
+		[SerializeField] private GameObject videoMesh;
 
 		[Header("Player")]
 		[Tooltip("Move speed of the character in m/s")]
@@ -140,6 +141,7 @@ namespace StarterAssets
 #endif
 			showGUI = false;
 			endScreen.SetActive(true);
+			videoMesh.SetActive(true);
 			StartCoroutine(VideoAppear(2f));
 			FindObjectOfType<Bell>().StopRinging(0.5f);
 			StartCoroutine(VideoFade(76f, 2f));

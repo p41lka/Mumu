@@ -263,6 +263,7 @@ MonoBehaviour:
   shootSound: {fileID: 8300000, guid: ffff5f64575394f44af5bfb6d08777fd, type: 3}
   endScreen: {fileID: 0}
   endScreenDelay: 4
+  videoMesh: {fileID: 0}
   MoveSpeed: 4
   SprintSpeed: 6
   RotationSpeed: 1
