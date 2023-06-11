@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
-#if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
-using UnityEngine.InputSystem;
 using System.Collections;
 using UnityEngine.Video;
 using UnityEngine.UI;
+#if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
+using UnityEngine.InputSystem;
 #endif
 
 namespace StarterAssets
@@ -135,7 +135,9 @@ namespace StarterAssets
 
 		private void EnableEndScreen()
         {
+#if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 			_playerInput.DeactivateInput();
+#endif
 			showGUI = false;
 			endScreen.SetActive(true);
 			StartCoroutine(VideoAppear(2f));
@@ -156,11 +158,11 @@ namespace StarterAssets
 		{
 			get
 			{
-				#if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
+#if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 				return _playerInput.currentControlScheme == "KeyboardMouse";
-				#else
+#else
 				return false;
-				#endif
+#endif
 			}
 		}
 
