@@ -93,6 +93,7 @@ namespace StarterAssets
             if (_input.fire)
             {
 				GetComponent<AudioSource>().Play();
+				StartCoroutine(StartParticle());
 				RaycastHit hit;
 				if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit))
 				{
@@ -107,6 +108,13 @@ namespace StarterAssets
 				
             }
         }
+
+		IEnumerator StartParticle()
+        {
+			GetComponentInChildren<ParticleSystem>().Play();
+			yield return new WaitForSeconds(0.5f);
+			GetComponentInChildren<ParticleSystem>().Stop();
+		}
 
 		IEnumerator VideoAppear(float speed)
         {
